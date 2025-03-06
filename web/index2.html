@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botones Estilizados</title>
+    <script src="main.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+    <body>
+        <h1>Carta del Restaurante</h1>
+        <div class="menu"></div>
+    
+        <script>
+            class MenuItem extends HTMLElement {
+                constructor() {
+                    super();
+                    this.attachShadow({ mode: 'open' });
+                }
+    
+                connectedCallback() {
+                    this.shadowRoot.innerHTML = `
+                        <style>
+                            .menu-item {
+                                width: 300px;
+                                background: white;
+                                padding: 15px;
+                                border-radius: 10px;
+                                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                                text-align: center;
+                            }
+                            img {
+                                width: 100%;
+                                border-radius: 10px;
+                            }
+                            .price {
+                                font-size: 18px;
+                                font-weight: bold;
+                                margin: 10px 0;
+                            }
+                            .allergens {
+                                font-size: 14px;
+                                color: red;
+                            }
+                        </style>
+                        <div class="menu-item">
+                            <img src="${this.getAttribute('image')}" alt="${this.getAttribute('name')}">
+                            <h3>${this.getAttribute('name')}</h3>
+                            <p>${this.getAttribute('description')}</p>
+                            <div class="price">${this.getAttribute('price')} €</div>
+                            <div class="allergens">Alergénicos: ${this.getAttribute('allergens')}</div>
+                        </div>
+                    `;
+                }
+            }
+    
+            customElements.define('menu-item', MenuItem);
+    
+            const menuData = {
+                "Primero": [
+                    { name: "Ensalada César", description: "Lechuga, pollo, crutones y salsa césar.", image: "cesar.jpg", price: 8.5, allergens: "Gluten, Huevo, Lácteos" },
+                    { name: "Gazpacho", description: "Sopa fría de tomate y hortalizas.", image: "gazpacho.jpg", price: 6.0, allergens: "Ninguno" }
+                ],
+                "Segundo": [
+                    { name: "Entrecot a la parrilla", description: "Entrecot de ternera con guarnición.", image: "entrecot.jpg", price: 18.0, allergens: "Ninguno" },
+                    { name: "Salmón al horno", description: "Salmón con salsa de eneldo.", image: "salmon.jpg", price: 16.5, allergens: "Pescado" }
+                ],
+                "Postre": [
+                    { name: "Tarta de queso", description: "Tarta cremosa con base de galleta.", image: "tarta.jpg", price: 5.5, allergens: "Gluten, Lácteos" },
+                    { name: "Helado de vainilla", description: "Helado casero con salsa de chocolate.", image: "helado.jpg", price: 4.0, allergens: "Lácteos" }
+                ],
+                "Bebida": [
+                    { name: "Coca-Cola", description: "Refresco de cola.", image: "cocacola.jpg", price: 2.5, allergens: "Ninguno" },
+                    { name: "Vino Tinto", description: "Copa de vino tinto de la casa.", image: "vino.jpg", price: 3.5, allergens: "Sulfitos" }
+                ]
+            };
+    
+            const menuContainer = document.querySelector('.menu');
+    
+            for (const category in menuData) {
+                const categoryTitle = document.createElement('div');
+                categoryTitle.classList.add('category');
+                categoryTitle.textContent = category;
+                menuContainer.appendChild(categoryTitle);
+    
+                menuData[category].forEach(item => {
+                    const menuItem = document.createElement('menu-item');
+                    menuItem.setAttribute('name', item.name);
+                    menuItem.setAttribute('description', item.description);
+                    menuItem.setAttribute('image', item.image);
+                    menuItem.setAttribute('price', item.price);
+                    menuItem.setAttribute('allergens', item.allergens);
+                    menuContainer.appendChild(menuItem);
+                });
+            }
+        </script>
+    
+    
+
+</div>
+</body>
+</html>
